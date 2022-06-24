@@ -5,6 +5,6 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\ExampleController;
 
 Route::get('/', [MainController::class, 'index'])->name('main');
-Route::get('/show', [ExampleController::class, 'index'])->name('example.index');
+Route::POST('/store', [MainController::class, 'store'])->name("main.store");
 
-Route::POST('/', [MainController::class, 'store'])->name("main.store");
+Route::get('/show', [ExampleController::class, 'index'])->name('example.index');
