@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->text('name');
             $table->text('surname');
-            $table->text('path')->default('-');
+            $table->text('path')->nullable();
 
             $table->timestamps();
         });
