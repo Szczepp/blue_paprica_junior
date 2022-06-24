@@ -18,9 +18,11 @@ class MainController extends Controller
     {
         $example = Example::create($request->validated());
 
-        $example->image = 'images/' . $request->image->store('example', 'images');
+        $example->image = optional('images/' . $request->image)->store('example', 'images');
         $example->save();
 
-        return redirect()->route('example.index');
+        return response()->json([
+            "success" => $example->image == null ? 'Only text saved' : 'Image and text saved'
+        ]);
     }
 }
