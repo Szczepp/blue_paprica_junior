@@ -14,9 +14,9 @@
         <th> Surname </th>
         <th> Image </th>
     </tr>
-    @empty($examples)
+    @if($examples->isEmpty())
         <tr>
-            <td colspan="6"> Table is empty </td>
+            <td colspan="4"> Nothing to see </td>
         </tr>
     @endempty
     @foreach($examples as $example)
@@ -24,9 +24,10 @@
             <td> {{ $example->id  }} </td>
             <td> {{ $example->name  }} </td>
             <td> {{ $example->surname  }} </td>
-            <td> <img src="{{ asset('storage/' . $example->path) }}" alt="{{ $example->path }}" width="150" height="150">  </td>
+            <td> <img src="{{ asset('storage/' . $example->path) }}" alt="{{ $example->path ?? "No image" }}" width="150" height="150">  </td>
         </tr>
     @endforeach
 </table>
+
 </body>
 </html>
