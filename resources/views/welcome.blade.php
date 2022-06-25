@@ -1,59 +1,66 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <title> Blue paprica task </title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+@extends('layouts.app')
+@section('content')
 
-    </head>
-    <body>
-        <form method="POST" action="{{ route('main.store') }}" enctype="multipart/form-data" id="exampleForm">
-            @csrf
-            <input type="text" name="name" id="name" autofocus required>
-            <label for="name"> Name:  </label>
-            <input type="text" name="surname" id="surname" required>
-            <label for="surname"> Surname:  </label>
-            <input type="file" name="image" accept="image/*" id="image">
-            <label for="image"> Image:  </label>
+    <form method="POST" action="{{ route('main.store') }}" enctype="multipart/form-data" id="exampleForm">
+        @csrf
+        <div class="form-row">
+            <label for="name"> Name: </label>
+            <input type="text" name="name" id="name" class="form-control" autofocus required>
+        </div>
+        <div class="form-row">
+            <label for="surname"> Surname: </label>
+            <input type="text" name="surname" id="surname" class="form-control" required>
+        </div>
+        <div class="form-row">
+            <div class="custom-file">
+                <input type="file" name="image" accept="image/*" id="image" class="custom-file-input">
+                <label class="custom-file-label"> Image: </label>
+            </div>
+        </div>
+        <div class="form-row">
+            <button id="btnSubmit" type="submit" class="btn btn-primary btn-lg mt-3"> Send</button>
+        </div>
+    </form>
 
-            <button id="btnSubmit" type="submit"> Send </button>
-        </form>
+    <div class="form-row">
+        <p class="lead" role="alert">
+            <a href="{{ route('example.index') }}" class="btn btn-secondary"> Check the content </a>
+        </p>
+    </div>
+    <div class="form-row">
+        <p class="lead" role="alert" id="msg">
 
-        <button>
-        <a href="{{ route('example.index') }}"> Check the content </a>
-        </button>
+        </p>
+    </div>
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-        <script type="text/javascript">
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        $('#exampleForm').submit(function (e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            if (formData.get('image').name === '') {
+                formData.delete('image');
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: `{{ route('main.store') }}`,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: (response) => {
+                    this.reset();
+                    $('#msg').text('Data sent');
+                    console.log(response);
+                },
+                error: function (response) {
+                    console.log(response);
                 }
             });
-
-            $('#exampleForm').submit(function(e) {
-                e.preventDefault();
-                let formData = new FormData(this);
-                console.log(formData.get('image'));
-                if (formData.get('image').name === ''){
-                    formData.delete('image');
-                }
-                console.log(formData.get('image'));
-
-                $.ajax({
-                    type:'POST',
-                    url: `{{ route('main.store') }}`,
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: (response) => {
-                        this.reset();
-                        console.log(response);
-                    },
-                    error: function(response){
-                        console.log(response);
-                    }
-                });
-            });
-        </script>
-    </body>
-</html>
+        });
+    </script>
+@endsection
