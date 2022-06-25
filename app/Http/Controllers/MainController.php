@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\ExampleRequest;
 use App\Models\Example;
-use Illuminate\Support\Facades\Storage;
+use Exception;
 
 class MainController extends Controller
 {
@@ -18,11 +17,16 @@ class MainController extends Controller
     {
         $example = Example::create($request->validated());
 
-        $example->image = optional('images/' . $request->image)->store('example', 'images');
-        $example->save();
+        try {
+            $request->has('image') ? $example->image = 'images/' . $example->path->store('example', 'images') : null;
+            $example->save();
+        } catch (Exception $e) {
+            $example->delete();
+        }
 
         return response()->json([
-            "success" => $example->image == null ? 'Only text saved' : 'Image and text saved'
+            'success' => !isset($e) ? 'Data saved' : '',
+            '$error' => $e ?? ''
         ]);
     }
 }
