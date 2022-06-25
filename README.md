@@ -10,3 +10,5 @@
 * Create symbolic links to upload images: `php artisan storage:link`.
 ### step 5:
 * Type `127.0.0.1:8000` in your browser
+
+#### Open the browser console to see the error messages 
