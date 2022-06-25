@@ -26,7 +26,7 @@ class ExampleRequest extends FormRequest
         return [
             'name' => ['required'],
             'surname' => ['required'],
-            'image' => ['nullable', 'image', 'max:500000'], // 2MB
+            'image' => ['nullable', 'image', 'max:2000'], // 2 000 KB => 2MB
         ];
     }
 }
