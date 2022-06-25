@@ -14,3 +14,4 @@
 * Type `127.0.0.1:8000` in your browser
 
 #### Open the browser console to see the error messages 
+If there is a problem with .env file, copy .env.example content into .env
